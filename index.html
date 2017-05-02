@@ -11,6 +11,7 @@
             <div class="no1"></div>
             <div class="op"></div>
             <div class="no2"></div>
+            <div class="result"></div>
             <div class="error"></div>
         </div>        
         <div class="calculator">
@@ -37,10 +38,12 @@
         var no1 = document.querySelector('.no1');
         var no2 = document.querySelector('.no2');
         var op = document.querySelector('.op');
+        var res = document.querySelector('.result');
         var err = document.querySelector('.error');
         function numberFunc(x) {
             err.innerHTML = '';
             if (op.textContent == ''){
+                res.innerHTML = '';
                 no1.innerHTML = no1.innerHTML + x;
             } else {
                 no2.innerHTML = no2.innerHTML + x;
@@ -48,7 +51,13 @@
         }
         function operatorFunc(y){
             if (no1.textContent == ''){
-                err.innerHTML = 'İlk değeri giriniz';
+                if (res.innerHTML == ''){
+                    err.innerHTML = 'İlk değeri giriniz';
+                } else {
+                    no1.innerHTML = res.textContent;
+                    res.innerHTML = '';
+                    op.innerHTML = y;
+                }
             } else {
                 op.innerHTML = y;
             }
@@ -66,7 +75,8 @@
                 } else {
                     var result = parseInt(no1.textContent) % parseInt(no2.textContent);
                 }
-                no1.innerHTML = result;
+                res.innerHTML = result;
+                no1.innerHTML = '';
                 no2.innerHTML = '';
                 op.innerHTML = '';
             }
