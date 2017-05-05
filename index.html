@@ -8,85 +8,91 @@
 <body>
     <div class="wrapper">
         <div class="out">
-            <div class="no1"></div>
+            <div class="no1">0</div>
             <div class="op"></div>
             <div class="no2"></div>
             <div class="result"></div>
             <div class="error"></div>
         </div>        
         <div class="calculator">
-            <div id="number" onclick="numberFunc(0)">0</div>
-            <div id="number" onclick="numberFunc(1)">1</div>
-            <div id="number" onclick="numberFunc(2)">2</div>
-            <div id="number" onclick="numberFunc(3)">3</div>
-            <div id="number" onclick="numberFunc(4)">4</div>
-            <div id="number" onclick="numberFunc(5)">5</div>
-            <div id="number" onclick="numberFunc(6)">6</div>
-            <div id="number" onclick="numberFunc(7)">7</div>
-            <div id="number" onclick="numberFunc(8)">8</div>
-            <div id="number" onclick="numberFunc(9)">9</div>
-            <div id="plus" onclick="operatorFunc('+')">+</div>
-            <div id="minus" onclick="operatorFunc('-')">-</div>
-            <div id="cross" onclick="operatorFunc('x')">x</div>
-            <div id="stroke" onclick="operatorFunc('/')">/</div>
-            <div id="percent" onclick="operatorFunc('%')">%</div>
-            <div id="equal" onclick="equalFunc()">=</div>
-            <div id="ce" onclick="clearFunc()">AC</div>
+            <div id="number" onclick="calculator.numberFunc(0)">0</div>
+            <div id="number" onclick="calculator.numberFunc(1)">1</div>
+            <div id="number" onclick="calculator.numberFunc(2)">2</div>
+            <div id="number" onclick="calculator.numberFunc(3)">3</div>
+            <div id="number" onclick="calculator.numberFunc(4)">4</div>
+            <div id="number" onclick="calculator.numberFunc(5)">5</div>
+            <div id="number" onclick="calculator.numberFunc(6)">6</div>
+            <div id="number" onclick="calculator.numberFunc(7)">7</div>
+            <div id="number" onclick="calculator.numberFunc(8)">8</div>
+            <div id="number" onclick="calculator.numberFunc(9)">9</div>
+            <div id="plus" onclick="calculator.operatorFunc('+')">+</div>
+            <div id="minus" onclick="calculator.operatorFunc('-')">-</div>
+            <div id="cross" onclick="calculator.operatorFunc('x')">x</div>
+            <div id="stroke" onclick="calculator.operatorFunc('/')">/</div>
+            <div id="percent" onclick="calculator.operatorFunc('%')">%</div>
+            <div id="equal" onclick="calculator.equalFunc()">=</div>
+            <div id="ce" onclick="calculator.clearFunc()">AC</div>
         </div>
     </div>
     <script type="text/javascript">
-        var no1 = document.querySelector('.no1');
-        var no2 = document.querySelector('.no2');
-        var op = document.querySelector('.op');
-        var res = document.querySelector('.result');
-        var err = document.querySelector('.error');
-        function numberFunc(x) {
-            err.innerHTML = '';
-            if (op.textContent == ''){
-                res.innerHTML = '';
-                no1.innerHTML = no1.innerHTML + x;
-            } else {
-                no2.innerHTML = no2.innerHTML + x;
-            }
-        }
-        function operatorFunc(y){
-            if (no1.textContent == ''){
-                if (res.innerHTML == ''){
-                    err.innerHTML = 'İlk değeri giriniz';
+        var calculator = {
+            obj : {
+                no1 : document.querySelector('.no1'),
+                no2 : document.querySelector('.no2'),
+                op : document.querySelector('.op'),
+                res : document.querySelector('.result'),
+                err : document.querySelector('.error')
+            },
+            numberFunc : function(x){
+                this.emptyFunc([this.obj.err]);
+                if (this.obj.op.textContent == ''){
+                    this.emptyFunc([this.obj.res]);
+                    this.obj.no1.innerHTML += x;
                 } else {
-                    no1.innerHTML = res.textContent;
-                    res.innerHTML = '';
-                    op.innerHTML = y;
+                    this.obj.no2.innerHTML += x;
                 }
-            } else {
-                op.innerHTML = y;
-            }
-        }
-        function equalFunc(){
-            if (no1.textContent == '' || no2.textContent == '' || op.textContent == ''){
-                err.innerHTML = 'Eksik değer girdiniz!';
-            } else {
-                if (op.textContent == '+') {
-                    var result = parseInt(no1.textContent) + parseInt(no2.textContent);
-                } else if (op.textContent == '-') {
-                    var result = parseInt(no1.textContent) - parseInt(no2.textContent);
-                } else if (op.textContent == 'x') {
-                    var result = parseInt(no1.textContent) * parseInt(no2.textContent);
+            },
+            operatorFunc : function(y){
+                if (this.obj.no1.textContent == ''){
+                    if (this.obj.res.innerHTML == ''){
+                        this.obj.err.innerHTML = 'İlk değeri giriniz';
+                    } else {
+                        this.obj.no1.innerHTML = this.obj.res.textContent;
+                        this.emptyFunc([this.obj.res]);
+                        this.obj.op.innerHTML = y;
+                    }
                 } else {
-                    var result = parseInt(no1.textContent) % parseInt(no2.textContent);
+                    this.obj.op.innerHTML = y;
                 }
-                res.innerHTML = result;
-                no1.innerHTML = '';
-                no2.innerHTML = '';
-                op.innerHTML = '';
+            },
+            equalFunc : function(){
+                if (this.obj.no1.textContent == '' || this.obj.no2.textContent == '' || this.obj.op.textContent == ''){
+                    this.obj.err.innerHTML = 'Eksik değer girdiniz!';
+                } else {
+                    if (this.obj.op.textContent == '+') {
+                        var result = parseInt(this.obj.no1.textContent) + parseInt(this.obj.no2.textContent);
+                    } else if (this.obj.op.textContent == '-') {
+                        var result = parseInt(this.obj.no1.textContent) - parseInt(this.obj.no2.textContent);
+                    } else if (this.obj.op.textContent == 'x') {
+                        var result = parseInt(this.obj.no1.textContent) * parseInt(this.obj.no2.textContent);
+                    } else if (this.obj.op.textContent == '/'){
+                        var result = parseInt(this.obj.no1.textContent) / parseInt(this.obj.no2.textContent);
+                    } else {
+                        var result = parseInt(this.obj.no1.textContent) % parseInt(this.obj.no2.textContent);
+                    }
+                    this.obj.res.innerHTML = result;
+                    this.emptyFunc([this.obj.no1, this.obj.no2, this.obj.op, this.obj.err]);
+                }
+            },
+            clearFunc : function(){
+                this.emptyFunc([this.obj.res, this.obj.no1, this.obj.no2, this.obj.op, this.obj.err]);
+            },
+            emptyFunc : function(arr){
+                arr.forEach(function(obj) {
+                    obj.innerHTML = '';
+                });
             }
-        }
-        function clearFunc(){
-            no1.innerHTML = '';
-            no2.innerHTML = '';
-            op.innerHTML = '';
-            err.innerHTML = '';
-        }
+        };
     </script>
 </body>
 </html>
