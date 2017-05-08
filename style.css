@@ -1,6 +1,6 @@
 .wrapper { 
     width: 200px; 
-    margin: 40px auto; 
+    margin: 50px auto;
 }
 
 .out {
@@ -12,6 +12,7 @@
     box-sizing: border-box;
     padding: 10px;
     line-height: 20px;
+    position: relative;
 }
 
 .out > div {
@@ -20,6 +21,18 @@
 
 .op {
     padding: 0 5px;
+}
+
+.error {
+    position: absolute;
+    left: 0;
+    top: -30px;
+    line-height: 24px;
+    background: #f00;
+    color: #fff;
+    font-size: 14px;
+    padding: 0 10px;
+    border-radius: 3px;
 }
 
 .calculator { 

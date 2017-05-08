@@ -25,6 +25,7 @@
             <div id="number" onclick="calculator.numberFunc(7)">7</div>
             <div id="number" onclick="calculator.numberFunc(8)">8</div>
             <div id="number" onclick="calculator.numberFunc(9)">9</div>
+            <div id="number" onclick="calculator.numberFunc('.')">.</div>
             <div id="plus" onclick="calculator.operatorFunc('+')">+</div>
             <div id="minus" onclick="calculator.operatorFunc('-')">-</div>
             <div id="cross" onclick="calculator.operatorFunc('x')">x</div>
@@ -44,48 +45,52 @@
                 err : document.querySelector('.error')
             },
             numberFunc : function(x){
-                this.emptyFunc([this.obj.err]);
+                this.emptyFunc([this.obj.res, this.obj.err]);                
                 if (this.obj.op.textContent == ''){
-                    this.emptyFunc([this.obj.res]);
-                    this.obj.no1.innerHTML += x;
+                    if (this.obj.no1.textContent == 0){
+                        this.obj.no1.innerHTML = x;
+                    } else {
+                        this.obj.no1.innerHTML += x;
+                    }
                 } else {
-                    this.obj.no2.innerHTML += x;
+                    if (this.obj.no2.textContent == 0){
+                        this.obj.no2.innerHTML = x;
+                    } else {
+                        this.obj.no2.innerHTML += x;
+                    }
                 }
             },
             operatorFunc : function(y){
-                if (this.obj.no1.textContent == ''){
-                    if (this.obj.res.innerHTML == ''){
-                        this.obj.err.innerHTML = 'İlk değeri giriniz';
-                    } else {
-                        this.obj.no1.innerHTML = this.obj.res.textContent;
-                        this.emptyFunc([this.obj.res]);
-                        this.obj.op.innerHTML = y;
-                    }
+                if (this.obj.res.innerHTML == ''){
+                    this.obj.op.innerHTML = y;
                 } else {
+                    this.obj.no1.innerHTML = this.obj.res.textContent;
                     this.obj.op.innerHTML = y;
                 }
+                this.emptyFunc([this.obj.res, this.obj.err]);
             },
             equalFunc : function(){
-                if (this.obj.no1.textContent == '' || this.obj.no2.textContent == '' || this.obj.op.textContent == ''){
+                if (this.obj.no2.textContent == '' || this.obj.op.textContent == ''){
                     this.obj.err.innerHTML = 'Eksik değer girdiniz!';
                 } else {
                     if (this.obj.op.textContent == '+') {
-                        var result = parseInt(this.obj.no1.textContent) + parseInt(this.obj.no2.textContent);
+                        var result = parseFloat(this.obj.no1.textContent) + parseFloat(this.obj.no2.textContent);
                     } else if (this.obj.op.textContent == '-') {
-                        var result = parseInt(this.obj.no1.textContent) - parseInt(this.obj.no2.textContent);
+                        var result = parseFloat(this.obj.no1.textContent) - parseFloat(this.obj.no2.textContent);
                     } else if (this.obj.op.textContent == 'x') {
-                        var result = parseInt(this.obj.no1.textContent) * parseInt(this.obj.no2.textContent);
+                        var result = parseFloat(this.obj.no1.textContent) * parseFloat(this.obj.no2.textContent);
                     } else if (this.obj.op.textContent == '/'){
-                        var result = parseInt(this.obj.no1.textContent) / parseInt(this.obj.no2.textContent);
+                        var result = parseFloat(this.obj.no1.textContent) / parseFloat(this.obj.no2.textContent);
                     } else {
-                        var result = parseInt(this.obj.no1.textContent) % parseInt(this.obj.no2.textContent);
+                        var result = parseFloat(this.obj.no1.textContent) % parseFloat(this.obj.no2.textContent);
                     }
                     this.obj.res.innerHTML = result;
                     this.emptyFunc([this.obj.no1, this.obj.no2, this.obj.op, this.obj.err]);
                 }
             },
             clearFunc : function(){
-                this.emptyFunc([this.obj.res, this.obj.no1, this.obj.no2, this.obj.op, this.obj.err]);
+                this.obj.no1.innerHTML = '0';
+                this.emptyFunc([this.obj.res, this.obj.no2, this.obj.op, this.obj.err]);
             },
             emptyFunc : function(arr){
                 arr.forEach(function(obj) {
@@ -96,3 +101,5 @@
     </script>
 </body>
 </html>
+
+<!--http://www.javascripter.net/faq/convert2.htm#parseFloat-->
