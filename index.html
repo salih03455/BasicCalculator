@@ -8,96 +8,80 @@
 <body>
     <div class="wrapper">
         <div class="out">
-            <div class="no1">0</div>
-            <div class="op"></div>
-            <div class="no2"></div>
-            <div class="result"></div>
+            <input type="text" value="0" class="result">
             <div class="error"></div>
         </div>        
         <div class="calculator">
-            <div id="number" onclick="calculator.numberFunc(0)">0</div>
-            <div id="number" onclick="calculator.numberFunc(1)">1</div>
-            <div id="number" onclick="calculator.numberFunc(2)">2</div>
-            <div id="number" onclick="calculator.numberFunc(3)">3</div>
-            <div id="number" onclick="calculator.numberFunc(4)">4</div>
-            <div id="number" onclick="calculator.numberFunc(5)">5</div>
-            <div id="number" onclick="calculator.numberFunc(6)">6</div>
-            <div id="number" onclick="calculator.numberFunc(7)">7</div>
-            <div id="number" onclick="calculator.numberFunc(8)">8</div>
-            <div id="number" onclick="calculator.numberFunc(9)">9</div>
-            <div id="number" onclick="calculator.numberFunc('.')">.</div>
-            <div id="plus" onclick="calculator.operatorFunc('+')">+</div>
-            <div id="minus" onclick="calculator.operatorFunc('-')">-</div>
-            <div id="cross" onclick="calculator.operatorFunc('x')">x</div>
-            <div id="stroke" onclick="calculator.operatorFunc('/')">/</div>
-            <div id="percent" onclick="calculator.operatorFunc('%')">%</div>
-            <div id="equal" onclick="calculator.equalFunc()">=</div>
-            <div id="ce" onclick="calculator.clearFunc()">AC</div>
+            <div class="button number">0</div>
+            <div class="button number">1</div>
+            <div class="button number">2</div>
+            <div class="button number">3</div>
+            <div class="button number">4</div>
+            <div class="button number">5</div>
+            <div class="button number">6</div>
+            <div class="button number">7</div>
+            <div class="button number">8</div>
+            <div class="button number">9</div>
+            <div class="button number">.</div>
+            <div class="button">(</div>
+            <div class="button">)</div>
+            <div class="button plus">+</div>
+            <div class="button minus">-</div>
+            <div class="button cross">*</div>
+            <div class="button stroke">/</div>
+            <div class="button percent">%</div>
+
+            <div class="back" onclick="calculator.backFunc()">BCK</div>
+            <div class="equal" onclick="calculator.equalFunc()">=</div>
+            <div class="ce" onclick="calculator.clearFunc()">AC</div>
         </div>
     </div>
     <script type="text/javascript">
+        var obj = {
+            buttons : document.querySelectorAll('.button'),
+            result : document.querySelector('.result'),
+            error : document.querySelector('.error')
+        }
+        for (var i = 0; i < obj.buttons.length; i += 1){
+            var button = obj.buttons[i];
+            button.onclick = function(){
+                if (obj.error.textContent.length){
+                    obj.error.innerHTML = '';
+                }
+                if (obj.result.value == 0){
+                    obj.result.value = this.textContent;    
+                } else {
+                obj.result.value += this.textContent;
+                }
+            }
+        }
         var calculator = {
-            obj : {
-                no1 : document.querySelector('.no1'),
-                no2 : document.querySelector('.no2'),
-                op : document.querySelector('.op'),
-                res : document.querySelector('.result'),
-                err : document.querySelector('.error')
-            },
-            numberFunc : function(x){
-                this.emptyFunc([this.obj.res, this.obj.err]);                
-                if (this.obj.op.textContent == ''){
-                    if (this.obj.no1.textContent == 0){
-                        this.obj.no1.innerHTML = x;
-                    } else {
-                        this.obj.no1.innerHTML += x;
-                    }
-                } else {
-                    if (this.obj.no2.textContent == 0){
-                        this.obj.no2.innerHTML = x;
-                    } else {
-                        this.obj.no2.innerHTML += x;
-                    }
+            clearFunc : function(){
+                if (obj.error.textContent.length){
+                    obj.error.innerHTML = '';
                 }
-            },
-            operatorFunc : function(y){
-                if (this.obj.res.innerHTML == ''){
-                    this.obj.op.innerHTML = y;
-                } else {
-                    this.obj.no1.innerHTML = this.obj.res.textContent;
-                    this.obj.op.innerHTML = y;
-                }
-                this.emptyFunc([this.obj.res, this.obj.err]);
+                obj.result.value = '0';
             },
             equalFunc : function(){
-                if (this.obj.no2.textContent == '' || this.obj.op.textContent == ''){
-                    this.obj.err.innerHTML = 'Eksik değer girdiniz!';
-                } else {
-                    if (this.obj.op.textContent == '+') {
-                        var result = parseFloat(this.obj.no1.textContent) + parseFloat(this.obj.no2.textContent);
-                    } else if (this.obj.op.textContent == '-') {
-                        var result = parseFloat(this.obj.no1.textContent) - parseFloat(this.obj.no2.textContent);
-                    } else if (this.obj.op.textContent == 'x') {
-                        var result = parseFloat(this.obj.no1.textContent) * parseFloat(this.obj.no2.textContent);
-                    } else if (this.obj.op.textContent == '/'){
-                        var result = parseFloat(this.obj.no1.textContent) / parseFloat(this.obj.no2.textContent);
-                    } else {
-                        var result = parseFloat(this.obj.no1.textContent) % parseFloat(this.obj.no2.textContent);
-                    }
-                    this.obj.res.innerHTML = result;
-                    this.emptyFunc([this.obj.no1, this.obj.no2, this.obj.op, this.obj.err]);
+                try {
+                    var res = eval(obj.result.value);
+                    obj.result.value = res;
+                } catch(err) {
+                    obj.error.innerHTML = 'Error';
                 }
             },
-            clearFunc : function(){
-                this.obj.no1.innerHTML = '0';
-                this.emptyFunc([this.obj.res, this.obj.no2, this.obj.op, this.obj.err]);
-            },
-            emptyFunc : function(arr){
-                arr.forEach(function(obj) {
-                    obj.innerHTML = '';
-                });
+            backFunc : function(){
+                if (obj.error.textContent.length){
+                    obj.error.innerHTML = '';
+                }
+                var str = obj.result.value.slice(0, -1);
+                if (str == ''){
+                    obj.result.value = '0';
+                } else {
+                    obj.result.value = str;
+                }
             }
-        };
+        }
     </script>
 </body>
 </html>
