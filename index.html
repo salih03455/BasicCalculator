@@ -31,54 +31,65 @@
             <div class="button stroke">/</div>
             <div class="button percent">%</div>
 
-            <div class="back" onclick="calculator.backFunc()">BCK</div>
-            <div class="equal" onclick="calculator.equalFunc()">=</div>
-            <div class="ce" onclick="calculator.clearFunc()">AC</div>
+            <div class="back" onclick="calc.backFunc()">BCK</div>
+            <div class="equal" onclick="calc.equalFunc()">=</div>
+            <div class="ce" onclick="calc.clearFunc()">AC</div>
         </div>
     </div>
     <script type="text/javascript">
-        var obj = {
-            buttons : document.querySelectorAll('.button'),
-            result : document.querySelector('.result'),
-            error : document.querySelector('.error')
-        }
-        for (var i = 0; i < obj.buttons.length; i += 1){
-            var button = obj.buttons[i];
-            button.onclick = function(){
-                if (obj.error.textContent.length){
-                    obj.error.innerHTML = '';
-                }
-                if (obj.result.value == 0){
-                    obj.result.value = this.textContent;    
-                } else {
-                obj.result.value += this.textContent;
-                }
-            }
-        }
-        var calculator = {
+        calc = {
+            obj : {
+                buttons : document.querySelectorAll('.button'),
+                result : document.querySelector('.result'),
+                error : document.querySelector('.error')
+            },
             clearFunc : function(){
-                if (obj.error.textContent.length){
-                    obj.error.innerHTML = '';
+                if (this.obj.error.textContent.length){
+                    this.obj.error.innerHTML = '';
                 }
-                obj.result.value = '0';
+                this.obj.result.value = '0';
+                calc.obj.result.classList.remove('before');
             },
             equalFunc : function(){
                 try {
-                    var res = eval(obj.result.value);
-                    obj.result.value = res;
+                    var res = eval(this.obj.result.value);
+                    this.obj.result.value = res;
+                    this.obj.result.classList.add('before');
                 } catch(err) {
-                    obj.error.innerHTML = 'Error';
+                    this.obj.error.innerHTML = 'Error';
                 }
             },
             backFunc : function(){
-                if (obj.error.textContent.length){
-                    obj.error.innerHTML = '';
+                if (this.obj.error.textContent.length){
+                    this.obj.error.innerHTML = '';
                 }
-                var str = obj.result.value.slice(0, -1);
+                var str = this.obj.result.value.slice(0, -1);
                 if (str == ''){
-                    obj.result.value = '0';
+                    this.obj.result.value = '0';
                 } else {
-                    obj.result.value = str;
+                    this.obj.result.value = str;
+                }
+                calc.obj.result.classList.remove('before');
+            }
+        };
+        for (var i = 0; i < calc.obj.buttons.length; i ++){
+            var button = calc.obj.buttons[i];
+            button.onclick = function(){
+                if (calc.obj.error.textContent.length){
+                    calc.obj.error.innerHTML = '';
+                }
+                if (this.classList.contains('number')){
+                    if (calc.obj.result.value == 0){
+                        calc.obj.result.value = this.textContent;
+                    } else if (calc.obj.result.classList.contains('before')) {
+                        calc.obj.result.value = this.textContent;
+                        calc.obj.result.classList.remove('before');
+                    } else {
+                        calc.obj.result.value += this.textContent;
+                    }
+                } else {
+                    calc.obj.result.value += this.textContent;
+                    calc.obj.result.classList.remove('before');
                 }
             }
         }
