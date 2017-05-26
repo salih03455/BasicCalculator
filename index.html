@@ -8,7 +8,7 @@
 <body>
     <div class="wrapper">
         <div class="out">
-            <input type="text" value="0" class="result">
+            <input type="text" value="0" class="result" disabled>
             <div class="error"></div>
         </div>        
         <div class="calculator">
@@ -22,14 +22,14 @@
             <div class="button number">7</div>
             <div class="button number">8</div>
             <div class="button number">9</div>
-            <div class="button number">.</div>
-            <div class="button">(</div>
-            <div class="button">)</div>
-            <div class="button plus">+</div>
-            <div class="button minus">-</div>
-            <div class="button cross">*</div>
-            <div class="button stroke">/</div>
-            <div class="button percent">%</div>
+            <div class="button operator">.</div>
+            <div class="button operator">(</div>
+            <div class="button operator">)</div>
+            <div class="button operator">+</div>
+            <div class="button operator">-</div>
+            <div class="button operator">*</div>
+            <div class="button operator">/</div>
+            <div class="button operator">%</div>
 
             <div class="back" onclick="calc.backFunc()">BCK</div>
             <div class="equal" onclick="calc.equalFunc()">=</div>
@@ -41,7 +41,8 @@
             obj : {
                 buttons : document.querySelectorAll('.button'),
                 result : document.querySelector('.result'),
-                error : document.querySelector('.error')
+                error : document.querySelector('.error'),
+                operators : ['+', '-', '*', '/', '.', '(', ')', '%']
             },
             clearFunc : function(){
                 if (this.obj.error.textContent.length){
@@ -57,6 +58,7 @@
                     this.obj.result.classList.add('before');
                 } catch(err) {
                     this.obj.error.innerHTML = 'Error';
+                    this.obj.result.classList.add('before');
                 }
             },
             backFunc : function(){
@@ -79,17 +81,21 @@
                     calc.obj.error.innerHTML = '';
                 }
                 if (this.classList.contains('number')){
-                    if (calc.obj.result.value == 0){
-                        calc.obj.result.value = this.textContent;
-                    } else if (calc.obj.result.classList.contains('before')) {
+                    if (calc.obj.result.value == 0 || calc.obj.result.classList.contains('before')){
                         calc.obj.result.value = this.textContent;
                         calc.obj.result.classList.remove('before');
                     } else {
                         calc.obj.result.value += this.textContent;
                     }
                 } else {
-                    calc.obj.result.value += this.textContent;
-                    calc.obj.result.classList.remove('before');
+                   var lastChar = calc.obj.result.value[calc.obj.result.value.length -1];
+                   if (calc.obj.operators.indexOf(lastChar) > -1){
+                        var res2 = calc.obj.result.value.slice(0, -1);
+                        calc.obj.result.value = res2 + this.textContent;
+                   } else {
+                        calc.obj.result.value += this.textContent;
+                        calc.obj.result.classList.remove('before');
+                   }
                 }
             }
         }
