@@ -72,35 +72,46 @@
                     this.obj.result.value = str;
                 }
                 calc.obj.result.classList.remove('before');
+            },
+            printFunc : function(pr, ths){
+                if (pr == 'text'){
+                    calc.obj.result.value = ths;
+                } else {
+                    calc.obj.result.value += ths;
+                }
             }
         };
         for (var i = 0; i < calc.obj.buttons.length; i ++){
             var button = calc.obj.buttons[i];
             button.onclick = function(){
-                if (calc.obj.error.textContent.length){
+                var lastChar = calc.obj.result.value[calc.obj.result.value.length -1];
+                if (calc.obj.error.textContent.length){ // hata yazısı varsa
                     calc.obj.error.innerHTML = '';
                 }
-                if (this.classList.contains('number')){
-                    if (calc.obj.result.value == 0 || calc.obj.result.classList.contains('before')){
-                        calc.obj.result.value = this.textContent;
-                        calc.obj.result.classList.remove('before');
-                    } else {
-                        calc.obj.result.value += this.textContent;
+                if (calc.obj.operators.indexOf(this.textContent) > -1) { // basılan buton operatör ise
+                    if (calc.obj.result.classList.contains('before')) { // before sınıfı varsa
+                        calc.obj.result.classList.remove('before'); // before sınıfını sil
                     }
-                } else {
-                   var lastChar = calc.obj.result.value[calc.obj.result.value.length -1];
-                   if (calc.obj.operators.indexOf(lastChar) > -1){
-                        var res2 = calc.obj.result.value.slice(0, -1);
-                        calc.obj.result.value = res2 + this.textContent;
-                   } else {
-                        calc.obj.result.value += this.textContent;
-                        calc.obj.result.classList.remove('before');
-                   }
+                    if (calc.obj.operators.indexOf(lastChar) > -1) { // son eleman operatörse
+                        calc.backFunc();
+                    }
+                    calc.printFunc('append', this.textContent);
+                } else { // basılan buton numara ise
+                    if (calc.obj.result.classList.contains('before')) { // before sınıfı varsa
+                        calc.obj.result.classList.remove('before'); // before sınıfını sil
+                        calc.printFunc('text', this.textContent);
+                    } else { // before sınıfı yoksa
+                        if ( calc.obj.result.value == '0' ) {
+                            calc.printFunc('text', this.textContent);
+                        } else {
+                            calc.printFunc('append', this.textContent);
+                        }
+                    }
                 }
             }
         }
     </script>
 </body>
 </html>
-
+<!--calc.obj.result.classList.contains('before')-->
 <!--http://www.javascripter.net/faq/convert2.htm#parseFloat-->

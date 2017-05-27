@@ -1,0 +1,16 @@
+basılan buton operatörse
+    eğer before sınıfı varsa
+        before sınıfını sil
+    eğer son değer operatörse
+        backFunc() fonksiyonunu çağır
+    değere ekle
+
+basılan buton rakamsa
+    eğer before sınıfı varsa
+        before sınıfını sil
+        değerin üzerine yaz
+    before sınıfı yoksa (else)
+        değer sıfırsa
+            değerin üzerine yaz
+        sıfır değilse (else)
+            değere ekle
