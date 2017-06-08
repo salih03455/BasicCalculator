@@ -1,117 +1,181 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Hesap Makinesi</title>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="style.css">
+	<title>Hesap Makinesi</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="wrapper">
-        <div class="out">
-            <input type="text" value="0" class="result" disabled>
-            <div class="error"></div>
-        </div>        
-        <div class="calculator">
-            <div class="button number">0</div>
-            <div class="button number">1</div>
-            <div class="button number">2</div>
-            <div class="button number">3</div>
-            <div class="button number">4</div>
-            <div class="button number">5</div>
-            <div class="button number">6</div>
-            <div class="button number">7</div>
-            <div class="button number">8</div>
-            <div class="button number">9</div>
-            <div class="button operator">.</div>
-            <div class="button operator">(</div>
-            <div class="button operator">)</div>
-            <div class="button operator">+</div>
-            <div class="button operator">-</div>
-            <div class="button operator">*</div>
-            <div class="button operator">/</div>
-            <div class="button operator">%</div>
+	<div class="wrapper">
+		<div class="out">
+			<input type="text" value="0" class="result" disabled>
+			<div class="error"></div>
+		</div>        
+		<div class="calculator">
+			<div class="button number">0</div>
+			<div class="button number">1</div>
+			<div class="button number">2</div>
+			<div class="button number">3</div>
+			<div class="button number">4</div>
+			<div class="button number">5</div>
+			<div class="button number">6</div>
+			<div class="button number">7</div>
+			<div class="button number">8</div>
+			<div class="button number">9</div>
+			<div class="button brackets">(</div>
+			<div class="button brackets">)</div>
+			<div class="button dot">.</div>
+			<div class="button operator">+</div>
+			<div class="button operator">-</div>
+			<div class="button operator">*</div>
+			<div class="button operator">/</div>
+			<div class="button operator">%</div>
 
-            <div class="back" onclick="calc.backFunc()">BCK</div>
-            <div class="equal" onclick="calc.equalFunc()">=</div>
-            <div class="ce" onclick="calc.clearFunc()">AC</div>
-        </div>
-    </div>
-    <script type="text/javascript">
-        calc = {
-            obj : {
-                buttons : document.querySelectorAll('.button'),
-                result : document.querySelector('.result'),
-                error : document.querySelector('.error'),
-                operators : ['+', '-', '*', '/', '.', '(', ')', '%']
-            },
-            clearFunc : function(){
-                if (this.obj.error.textContent.length){
-                    this.obj.error.innerHTML = '';
-                }
-                this.obj.result.value = '0';
-                calc.obj.result.classList.remove('before');
-            },
-            equalFunc : function(){
-                try {
-                    var res = eval(this.obj.result.value);
-                    this.obj.result.value = res;
-                    this.obj.result.classList.add('before');
-                } catch(err) {
-                    this.obj.error.innerHTML = 'Error';
-                    this.obj.result.classList.add('before');
-                }
-            },
-            backFunc : function(){
-                if (this.obj.error.textContent.length){
-                    this.obj.error.innerHTML = '';
-                }
-                var str = this.obj.result.value.slice(0, -1);
-                if (str == ''){
-                    this.obj.result.value = '0';
-                } else {
-                    this.obj.result.value = str;
-                }
-                calc.obj.result.classList.remove('before');
-            },
-            printFunc : function(pr, ths){
-                if (pr == 'text'){
-                    calc.obj.result.value = ths;
-                } else {
-                    calc.obj.result.value += ths;
-                }
-            }
-        };
-        for (var i = 0; i < calc.obj.buttons.length; i ++){
-            var button = calc.obj.buttons[i];
-            button.onclick = function(){
-                var lastChar = calc.obj.result.value[calc.obj.result.value.length -1];
-                if (calc.obj.error.textContent.length){ // hata yazısı varsa
-                    calc.obj.error.innerHTML = '';
-                }
-                if (calc.obj.operators.indexOf(this.textContent) > -1) { // basılan buton operatör ise
-                    if (calc.obj.result.classList.contains('before')) { // before sınıfı varsa
-                        calc.obj.result.classList.remove('before'); // before sınıfını sil
-                    }
-                    if (calc.obj.operators.indexOf(lastChar) > -1) { // son eleman operatörse
-                        calc.backFunc();
-                    }
-                    calc.printFunc('append', this.textContent);
-                } else { // basılan buton numara ise
-                    if (calc.obj.result.classList.contains('before')) { // before sınıfı varsa
-                        calc.obj.result.classList.remove('before'); // before sınıfını sil
-                        calc.printFunc('text', this.textContent);
-                    } else { // before sınıfı yoksa
-                        if ( calc.obj.result.value == '0' ) {
-                            calc.printFunc('text', this.textContent);
-                        } else {
-                            calc.printFunc('append', this.textContent);
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+			<div class="back" onclick="calc.backFunc()">BCK</div>
+			<div class="equal" onclick="calc.equalFunc()">=</div>
+			<div class="ce" onclick="calc.clearFunc()">AC</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		var calc = {
+			buttons : document.querySelectorAll('.button'),
+			result : document.querySelector('.result'),
+			error : document.querySelector('.error'),
+			operators : ['+', '-', '*', '/', '%'],
+			numbers : ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+			brackets : ['(', ')'],
+			status : 0, // hiç hesap yapılmamışsa 0
+			lastChar : function() {
+				return this.result.value[this.result.value.length -1];
+			},
+			init : function(){
+				this.loopFunc();
+			},
+			loopFunc : function(){
+				for (var i = 0; i < calc.buttons.length; i ++){
+					var button = calc.buttons[i];
+					button.onclick = function(){
+						calc.errorControl('clear');
+						calc.buttonStatusControl(this);
+					}
+				}
+			},
+			buttonStatusControl(ths){
+				var buttonText = ths.textContent;
+				if (calc.operators.indexOf(buttonText) > -1) { // basılan buton operatör ise
+					calc.operatorFunc(buttonText);
+				} else if (calc.numbers.indexOf(buttonText) > -1) { // basılan buton numara ise
+					calc.numberFunc(buttonText);
+				} else if (calc.brackets.indexOf(buttonText) > -1) { // basılan buton parantez ise
+					calc.bracketsFunc(buttonText);
+				} else { // basılan nokta ise
+					calc.dotFunc(buttonText);
+				}
+			},
+			errorControl : function(type){
+				switch (type){
+					case 'add':
+						this.error.innerHTML = 'Error';
+						this.status = 0;
+						break;
+					case 'clear':
+						this.error.innerHTML = '';
+				}
+			},
+			operatorFunc : function(buttonText){
+				calc.status = 0;
+				var hami = parseInt(calc.lastChar());
+				console.log(hami.indexOf(calc.operators));
+				if (a.indexOf(calc.operators) > -1 ) {
+					calc.backFunc();
+				}
+				calc.printFunc('append', buttonText);
+			},
+			numberFunc : function(buttonText){
+				if (calc.status == 1){ // ekranda işlem sonucu varsa
+					calc.status = 0;
+					calc.printFunc('text', buttonText);
+				} else { // ekranda işlem sonucu yoksa
+					calc.printFunc('zero', buttonText);
+				}
+			},
+			bracketsFunc : function(buttonText) {
+				var resVal = calc.result.value,
+					a = 0,
+					b = 0;
+				switch (buttonText){
+					case '(':
+						if ( calc.status == 1 ) {
+							calc.status = 0;
+							calc.printFunc('text', buttonText);
+						} else {
+							if ( calc.lastChar().indexOf(calc.numbers) > -1 && calc.result.value != 0 ) {
+								calc.printFunc('append', '*');
+							}
+							calc.printFunc('zero', buttonText);
+						}
+						break;
+					case ')':
+						for (i = 0; i <  resVal.length; i++) {
+							if ( resVal[i] == ')' ) {
+								a++;
+							}
+							if ( resVal[i] == '(' ) {
+								b++;
+							}
+						}
+						if ( b > a && resVal[resVal.length - 1] != '(' ) {
+							calc.printFunc('append', buttonText);
+						}
+				}
+			},
+			dotFunc : function(buttonText) {
+				calc.printFunc('append', buttonText);
+			},
+			clearFunc : function(){
+				this.errorControl('clear');
+				calc.result.value = '0';
+				this.status = 0;
+			},
+			equalFunc : function(){
+				try {
+					var res = eval(calc.result.value);
+					calc.result.value = res;
+					this.status = 1;
+				} catch(err) {
+					this.errorControl('add');
+				}
+			},
+			backFunc : function(){
+				this.errorControl('clear');
+				calc.status = 0;
+				var str = calc.result.value.slice(0, -1);
+				if (str == ''){
+					calc.result.value = '0';
+				} else {
+					calc.result.value = str;
+				}
+			},
+			printFunc : function(print, txt){
+				switch (print){
+					case 'text':
+						calc.result.value = txt;
+						break;
+					case 'append':
+						calc.result.value += txt;
+						break;
+					case 'zero':
+						if ( calc.result.value == '0' ) { // ekranda sıfır yazıyorsa
+							calc.result.value = txt;
+						} else {
+							calc.result.value += txt;
+						}
+				}
+			},
+		};
+		calc.init();
+	</script>
 </body>
 </html>
-<!--calc.obj.result.classList.contains('before')-->
+
 <!--http://www.javascripter.net/faq/convert2.htm#parseFloat-->

@@ -1,53 +1,53 @@
 .wrapper { 
-    width: 200px; 
-    margin: 50px auto;
+	width: 200px; 
+	margin: 50px auto;
 }
 
 .out {
-    margin: 0 0 20px;
-    position: relative;
+	margin: 0 0 20px;
+	position: relative;
 }
 
 .result {
-    width: 100%;
-    padding: 6px 12px;
-    box-sizing: border-box;
-    line-height: 20px;
-    outline: none;
-    border: 3px solid #333;
+	width: 100%;
+	padding: 6px 12px;
+	box-sizing: border-box;
+	line-height: 20px;
+	outline: none;
+	border: 3px solid #333;
 }
 
 .error {
-    position: absolute;
-    left: 0;
-    top: -30px;
-    line-height: 24px;
-    background: #f00;
-    color: #fff;
-    font-size: 14px;
-    padding: 0 10px;
-    border-radius: 3px;
+	position: absolute;
+	left: 0;
+	top: -30px;
+	line-height: 24px;
+	background: #f00;
+	color: #fff;
+	font-size: 14px;
+	padding: 0 10px;
+	border-radius: 3px;
 }
 
 .calculator { 
-    font-size: 0; 
-    text-align: center; 
+	font-size: 0; 
+	text-align: center; 
 }
 
 .calculator > div { 
-    width: 40px; 
-    height: 40px; 
-    line-height: 40px; 
-    text-align: center; 
-    background: #333; 
-    font-size: 13px; 
-    color: #fff; 
-    border-radius: 3px; 
-    display: inline-block; 
-    cursor: pointer; 
-    margin: 5px; 
+	width: 40px; 
+	height: 40px; 
+	line-height: 40px; 
+	text-align: center; 
+	background: #333; 
+	font-size: 13px; 
+	color: #fff; 
+	border-radius: 3px; 
+	display: inline-block; 
+	cursor: pointer; 
+	margin: 5px; 
 }
 
 .calculator > div:hover { 
-    background-color: #00a200; 
+	background-color: #00a200; 
 }
