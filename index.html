@@ -43,10 +43,11 @@
 			error : document.querySelector('.error'),
 			operators : ['+', '-', '*', '/', '%'],
 			numbers : ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+			lastNumber : [],
 			brackets : ['(', ')'],
 			status : 0, // hiç hesap yapılmamışsa 0
 			lastChar : function() {
-				return this.result.value[this.result.value.length -1];
+				return calc.result.value[calc.result.value.length -1];
 			},
 			init : function(){
 				this.loopFunc();
@@ -83,10 +84,11 @@
 				}
 			},
 			operatorFunc : function(buttonText){
+				calc.lastNumber = [];
+				console.log(calc.lastNumber);
 				calc.status = 0;
-				var hami = parseInt(calc.lastChar());
-				console.log(hami.indexOf(calc.operators));
-				if (a.indexOf(calc.operators) > -1 ) {
+				var x = calc.lastChar();
+				if (calc.operators.indexOf(x) > -1 ) {
 					calc.backFunc();
 				}
 				calc.printFunc('append', buttonText);
@@ -95,9 +97,12 @@
 				if (calc.status == 1){ // ekranda işlem sonucu varsa
 					calc.status = 0;
 					calc.printFunc('text', buttonText);
+					calc.lastNumber = [buttonText];
 				} else { // ekranda işlem sonucu yoksa
 					calc.printFunc('zero', buttonText);
+					calc.lastNumber.push(buttonText);
 				}
+				console.log(calc.lastNumber);
 			},
 			bracketsFunc : function(buttonText) {
 				var resVal = calc.result.value,
@@ -108,11 +113,15 @@
 						if ( calc.status == 1 ) {
 							calc.status = 0;
 							calc.printFunc('text', buttonText);
+							calc.lastNumber = [];
+							console.log(calc.lastNumber);
 						} else {
-							if ( calc.lastChar().indexOf(calc.numbers) > -1 && calc.result.value != 0 ) {
+							if ( calc.numbers.indexOf(calc.lastChar()) > -1 && calc.result.value != 0 ) {
 								calc.printFunc('append', '*');
 							}
 							calc.printFunc('zero', buttonText);
+							calc.lastNumber = [];
+							console.log(calc.lastNumber);
 						}
 						break;
 					case ')':
@@ -126,35 +135,66 @@
 						}
 						if ( b > a && resVal[resVal.length - 1] != '(' ) {
 							calc.printFunc('append', buttonText);
+							calc.lastNumber = [];
+							console.log(calc.lastNumber);
 						}
 				}
 			},
 			dotFunc : function(buttonText) {
-				calc.printFunc('append', buttonText);
+				if (calc.lastNumber.indexOf(buttonText) == -1) {
+					if (calc.status == 0) { // işlem sonucu yoksa
+						calc.printFunc('append', buttonText);
+						calc.lastNumber.push(buttonText);
+					} else {
+						calc.status = 0;
+						calc.printFunc('text', buttonText);
+						calc.lastNumber = ['.'];
+					}
+					console.log(calc.lastNumber);
+				} else {
+					if (calc.status == 1) {
+						calc.status = 0;
+						calc.printFunc('text', buttonText);
+						calc.lastNumber = ['.'];
+					}
+					console.log(calc.lastNumber);						
+				}
 			},
 			clearFunc : function(){
 				this.errorControl('clear');
 				calc.result.value = '0';
 				this.status = 0;
+				calc.lastNumber = ['0'];
+				console.log(calc.lastNumber);
 			},
 			equalFunc : function(){
 				try {
 					var res = eval(calc.result.value);
 					calc.result.value = res;
+					var x = calc.result.value;
+					calc.lastNumber = x.split('');
+					console.log(calc.lastNumber);
 					this.status = 1;
+					
 				} catch(err) {
 					this.errorControl('add');
 				}
 			},
-			backFunc : function(){
-				this.errorControl('clear');
+			backFunc : function() { // BURADA KALDIK
+				var lastChar = calc.lastChar();
 				calc.status = 0;
+				this.errorControl('clear');
 				var str = calc.result.value.slice(0, -1);
 				if (str == ''){
 					calc.result.value = '0';
+					calc.lastNumber = ['0'];
 				} else {
 					calc.result.value = str;
+					var separators = ['\\\+', '-', '\\\(', '\\\)', '\\*', '/', '\\\.'];
+					var tokens = str.split(new RegExp(separators.join('|'), 'g'));
+					calc.lastNumber = tokens[tokens.length - 1].split('');
 				}
+				console.log(calc.lastNumber);
 			},
 			printFunc : function(print, txt){
 				switch (print){
