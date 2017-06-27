@@ -49,8 +49,9 @@
 			lastChar : function() {
 				return calc.result.value[calc.result.value.length -1];
 			},
-			init : function(){
+			init : function() {
 				this.loopFunc();
+				this.keyFunc();
 			},
 			loopFunc : function(){
 				for (var i = 0; i < calc.buttons.length; i ++){
@@ -58,6 +59,84 @@
 					button.onclick = function(){
 						calc.errorControl('clear');
 						calc.buttonStatusControl(this);
+					}
+				}
+			},
+			keyFunc() {
+				window.onkeypress = function(event) {
+					var char = event.which || event.keyCode;
+					switch(char) {
+						case 13:
+							calc.equalFunc();
+							break;
+						case 37:
+							calc.operatorFunc('%');
+							break;
+						case 40:
+							calc.bracketsFunc('(');
+							break;
+						case 41:
+							calc.bracketsFunc(')');
+							break;
+						case 42:
+							calc.operatorFunc('*');
+							break;
+						case 43:
+							calc.operatorFunc('+');
+							break;
+						case 44:
+							calc.dotFunc('.');
+							break;
+						case 45:
+							calc.operatorFunc('-');
+							break;
+						case 46:
+							calc.dotFunc('.');
+							break;
+						case 47:
+							calc.operatorFunc('/');
+							break;
+						case 48:
+							calc.numberFunc(0);
+							break;
+						case 49:
+							calc.numberFunc(1);
+							break;
+						case 50:
+							calc.numberFunc(2);
+							break;
+						case 51:
+							calc.numberFunc(3);
+							break;
+						case 52:
+							calc.numberFunc(4);
+							break;
+						case 53:
+							calc.numberFunc(5);
+							break;
+						case 54:
+							calc.numberFunc(6);
+							break;
+						case 55:
+							calc.numberFunc(7);
+							break;
+						case 56:
+							calc.numberFunc(8);
+							break;
+						case 57:
+							calc.numberFunc(9);
+							break;
+					}
+				}
+				window.onkeydown = function(event) {
+					var char = event.which || event.keyCode;
+					switch(char) {
+						case 8:
+						calc.backFunc();
+						break;
+						case 46:
+						calc.clearFunc();
+						break;
 					}
 				}
 			},
@@ -180,7 +259,7 @@
 					this.errorControl('add');
 				}
 			},
-			backFunc : function() { // BURADA KALDIK
+			backFunc : function() {
 				var lastChar = calc.lastChar();
 				calc.status = 0;
 				this.errorControl('clear');
@@ -190,7 +269,7 @@
 					calc.lastNumber = ['0'];
 				} else {
 					calc.result.value = str;
-					var separators = ['\\\+', '-', '\\\(', '\\\)', '\\*', '/', '\\\.'];
+					var separators = ['\\\+', '-', '\\\(', '\\\)', '\\*', '/', '\\\.', '\\\%'];
 					var tokens = str.split(new RegExp(separators.join('|'), 'g'));
 					calc.lastNumber = tokens[tokens.length - 1].split('');
 				}
@@ -211,7 +290,7 @@
 							calc.result.value += txt;
 						}
 				}
-			},
+			}
 		};
 		calc.init();
 	</script>
