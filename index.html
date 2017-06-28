@@ -195,7 +195,7 @@
 							calc.lastNumber = [];
 							console.log(calc.lastNumber);
 						} else {
-							if ( calc.numbers.indexOf(calc.lastChar()) > -1 && calc.result.value != 0 ) {
+							if ( (calc.numbers.indexOf(calc.lastChar()) > -1 || calc.lastChar() == ')') && calc.result.value != 0 ) {
 								calc.printFunc('append', '*');
 							}
 							calc.printFunc('zero', buttonText);
