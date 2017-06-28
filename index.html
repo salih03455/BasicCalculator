@@ -43,7 +43,7 @@
 			error : document.querySelector('.error'),
 			operators : ['+', '-', '*', '/', '%'],
 			numbers : ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
-			lastNumber : [],
+			lastNumber : '',
 			brackets : ['(', ')'],
 			status : 0, // hiç hesap yapılmamışsa 0
 			lastChar : function() {
@@ -163,7 +163,7 @@
 				}
 			},
 			operatorFunc : function(buttonText){
-				calc.lastNumber = [];
+				calc.lastNumber = '';
 				console.log(calc.lastNumber);
 				calc.status = 0;
 				var x = calc.lastChar();
@@ -176,10 +176,10 @@
 				if (calc.status == 1){ // ekranda işlem sonucu varsa
 					calc.status = 0;
 					calc.printFunc('text', buttonText);
-					calc.lastNumber = [buttonText];
+					calc.lastNumber = buttonText;
 				} else { // ekranda işlem sonucu yoksa
 					calc.printFunc('zero', buttonText);
-					calc.lastNumber.push(buttonText);
+					calc.lastNumber += buttonText;
 				}
 				console.log(calc.lastNumber);
 			},
@@ -192,14 +192,14 @@
 						if ( calc.status == 1 ) {
 							calc.status = 0;
 							calc.printFunc('text', buttonText);
-							calc.lastNumber = [];
+							calc.lastNumber = '';
 							console.log(calc.lastNumber);
 						} else {
 							if ( (calc.numbers.indexOf(calc.lastChar()) > -1 || calc.lastChar() == ')') && calc.result.value != 0 ) {
 								calc.printFunc('append', '*');
 							}
 							calc.printFunc('zero', buttonText);
-							calc.lastNumber = [];
+							calc.lastNumber = '';
 							console.log(calc.lastNumber);
 						}
 						break;
@@ -214,7 +214,7 @@
 						}
 						if ( b > a && resVal[resVal.length - 1] != '(' ) {
 							calc.printFunc('append', buttonText);
-							calc.lastNumber = [];
+							calc.lastNumber = '';
 							console.log(calc.lastNumber);
 						}
 				}
@@ -223,18 +223,18 @@
 				if (calc.lastNumber.indexOf(buttonText) == -1) {
 					if (calc.status == 0) { // işlem sonucu yoksa
 						calc.printFunc('append', buttonText);
-						calc.lastNumber.push(buttonText);
+						calc.lastNumber += buttonText;
 					} else {
 						calc.status = 0;
 						calc.printFunc('text', buttonText);
-						calc.lastNumber = ['.'];
+						calc.lastNumber = '.';
 					}
 					console.log(calc.lastNumber);
 				} else {
 					if (calc.status == 1) {
 						calc.status = 0;
 						calc.printFunc('text', buttonText);
-						calc.lastNumber = ['.'];
+						calc.lastNumber = '.';
 					}
 					console.log(calc.lastNumber);						
 				}
@@ -243,18 +243,16 @@
 				this.errorControl('clear');
 				calc.result.value = '0';
 				this.status = 0;
-				calc.lastNumber = ['0'];
+				calc.lastNumber = 0;
 				console.log(calc.lastNumber);
 			},
 			equalFunc : function(){
 				try {
 					var res = eval(calc.result.value);
 					calc.result.value = res;
-					var x = calc.result.value;
-					calc.lastNumber = x.split('');
+					calc.lastNumber = calc.result.value;
 					console.log(calc.lastNumber);
 					this.status = 1;
-					
 				} catch(err) {
 					this.errorControl('add');
 				}
@@ -266,12 +264,12 @@
 				var str = calc.result.value.slice(0, -1);
 				if (str == ''){
 					calc.result.value = '0';
-					calc.lastNumber = ['0'];
+					calc.lastNumber = 0;
 				} else {
 					calc.result.value = str;
 					var separators = ['\\\+', '-', '\\\(', '\\\)', '\\*', '/', '\\\.', '\\\%'];
 					var tokens = str.split(new RegExp(separators.join('|'), 'g'));
-					calc.lastNumber = tokens[tokens.length - 1].split('');
+					calc.lastNumber = tokens[tokens.length - 1];
 				}
 				console.log(calc.lastNumber);
 			},
