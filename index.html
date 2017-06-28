@@ -248,10 +248,12 @@
 			},
 			equalFunc : function(){
 				try {
+					var beforeValue = calc.result.value;
 					var res = eval(calc.result.value);
 					calc.result.value = res;
 					calc.lastNumber = calc.result.value;
 					console.log(calc.lastNumber);
+					console.log(beforeValue);
 					this.status = 1;
 				} catch(err) {
 					this.errorControl('add');
