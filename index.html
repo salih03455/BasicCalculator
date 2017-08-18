@@ -12,6 +12,8 @@
 			<div class="error"></div>
 		</div>        
 		<div class="calculator">
+			<div class="ce big" onclick="calc.clearFunc()">CLEAR</div>
+			<div class="back" onclick="calc.backFunc()">BCK</div>
 			<div class="button number">0</div>
 			<div class="button number">1</div>
 			<div class="button number">2</div>
@@ -30,9 +32,7 @@
 			<div class="button operator">*</div>
 			<div class="button operator">/</div>
 			<div class="button operator">%</div>
-			<div class="back" onclick="calc.backFunc()">BCK</div>
 			<div class="equal" onclick="calc.equalFunc()">=</div>
-			<div class="ce" onclick="calc.clearFunc()">AC</div>
 		</div>
 		<div class="history"></div>
 	</div>
