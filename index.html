@@ -3,6 +3,7 @@
 <head>
 	<title>Hesap Makinesi</title>
 	<meta charset="utf-8">
+	<link href="https://fonts.googleapis.com/css?family=Saira+Semi+Condensed" rel="stylesheet">
 	<link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,27 +13,28 @@
 			<div class="error"></div>
 		</div>        
 		<div class="calculator">
-			<div class="ce big" onclick="calc.clearFunc()">CLEAR</div>
+			<div class="clear" onclick="calc.clearFunc()">CLEAR</div>
 			<div class="back" onclick="calc.backFunc()">BCK</div>
-			<div class="button number">0</div>
-			<div class="button number">1</div>
-			<div class="button number">2</div>
-			<div class="button number">3</div>
-			<div class="button number">4</div>
-			<div class="button number">5</div>
-			<div class="button number">6</div>
+			<div class="" onclick="">BOS</div>
+			<div class="button brackets">(</div>
+			<div class="button brackets">)</div>
+			<div class="button operator">%</div>
+			<div class="button operator">/</div>
 			<div class="button number">7</div>
 			<div class="button number">8</div>
 			<div class="button number">9</div>
-			<div class="button brackets">(</div>
-			<div class="button brackets">)</div>
-			<div class="button dot">.</div>
-			<div class="button operator">+</div>
-			<div class="button operator">-</div>
 			<div class="button operator">*</div>
-			<div class="button operator">/</div>
-			<div class="button operator">%</div>
-			<div class="equal" onclick="calc.equalFunc()">=</div>
+			<div class="button number">4</div>
+			<div class="button number">5</div>
+			<div class="button number">6</div>
+			<div class="button operator">-</div>
+			<div class="button number">1</div>
+			<div class="button number">2</div>
+			<div class="button number">3</div>
+			<div class="button operator">+</div>
+			<div class="button number">0</div>
+			<div class="button dot">.</div>
+			<div class="equal big" onclick="calc.equalFunc()">=</div>
 		</div>
 		<div class="history"></div>
 	</div>
